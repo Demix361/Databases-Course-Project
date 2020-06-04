@@ -21,11 +21,18 @@
                                     <p class="card-text">Стоимость: {{ obj.product.cost }}</p>
                                     <p class="card-text">Количество: {{ obj.quantity }}</p>
                                       <div class="btn-group" role="group" aria-label="Basic example">
-                                          <a href="#" class="btn btn-secondary">-</button></a>
-                                          <a href="#" class="btn btn-secondary">+</button></a>
+                                          {% if obj.quantity > 1 %}
+                                            <a href="{% url 'decrease-quantity' obj.product.id %}" class="btn btn-secondary">-</button></a>
+                                          {% else %}
+                                            <a href="{% url 'decrease-quantity' obj.product.id %}" class="btn btn-secondary disabled">-</button></a>
+                                          {% endif %}
+                                          {% if obj.quantity < 20 %}
+                                            <a href="{% url 'increase-quantity' obj.product.id %}" class="btn btn-secondary">+</button></a>
+                                          {% else %}
+                                            <a href="{% url 'increase-quantity' obj.product.id %}" class="btn btn-secondary disabled">-</button></a>
+                                          {% endif %}
                                           <a href="{% url 'remove-from-cart' obj.product.id %}" class="btn btn-secondary">Удалить</button></a>
                                       </div>
-
                                   </div>
                                 </div>
                               </div>

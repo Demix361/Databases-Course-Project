@@ -54,3 +54,42 @@ def remove_from_cart(request, **kwargs):
 
     return redirect(request.META.get('HTTP_REFERER', 'shop-home'))
 
+
+@login_required()
+def increase_quantity(request, **kwargs):
+    product = Product.objects.filter(id=kwargs.get('pk')).first()
+    user = request.user
+    cart = Cart.objects.filter(user=user, active='t').first()
+
+    if product.id in Cart.objects.filter(user=user, active='t').first().cartitem_set.all().values_list('product', flat=True):
+        quantity = CartItem.objects.filter(cart=cart, product=product).first().quantity
+
+        if quantity < 20:
+            CartItem.objects.filter(cart=cart, product=product).update(quantity=quantity + 1)
+            print('ITEM QUANTITY INCREASED')
+        else:
+            print('MAXIMUM QUANTITY IS REACHED')
+    else:
+        print('ITEM NOT IN CART')
+
+    return redirect(request.META.get('HTTP_REFERER', 'shop-home'))
+
+
+@login_required()
+def decrease_quantity(request, **kwargs):
+    product = Product.objects.filter(id=kwargs.get('pk')).first()
+    user = request.user
+    cart = Cart.objects.filter(user=user, active='t').first()
+
+    if product.id in Cart.objects.filter(user=user, active='t').first().cartitem_set.all().values_list('product', flat=True):
+        quantity = CartItem.objects.filter(cart=cart, product=product).first().quantity
+
+        if quantity > 1:
+            CartItem.objects.filter(cart=cart, product=product).update(quantity=quantity - 1)
+            print('ITEM QUANTITY DECREASED')
+        else:
+            print('MINIMUM QUANTITY IS REACHED')
+    else:
+        print('ITEM NOT IN CART')
+
+    return redirect(request.META.get('HTTP_REFERER', 'shop-home'))
