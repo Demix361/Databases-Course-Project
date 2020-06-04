@@ -1,0 +1,42 @@
+{% extends "shop/base.html" %}
+{% block content %}
+
+<h1 class="my-4">Товары в Вашей корзине</h1>
+
+<div class="album py-5 bg-light">
+    <div class="container">
+        {% for cart in carts %}
+            {% if cart.active %}
+                {% for obj in cart.cartitem_set.all %}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card mb-3" style="max-width: 540px;">
+                              <div class="row no-gutters">
+                                <div class="col-md-4">
+                                  <a href="{% url 'shop-product' obj.product.id %}"><img src="{{ obj.product.image.url }}" class="card-img" alt="..."></a>
+                                </div>
+                                <div class="col-md-8">
+                                  <div class="card-body">
+                                    <h5 class="card-title">{{ obj.product.name }}</h5>
+                                    <p class="card-text">Стоимость: {{ obj.product.cost }}</p>
+                                    <p class="card-text">Количество: {{ obj.quantity }}</p>
+                                      <div class="btn-group" role="group" aria-label="Basic example">
+                                          <a href="#" class="btn btn-secondary">-</button></a>
+                                          <a href="#" class="btn btn-secondary">+</button></a>
+                                          <a href="#" class="btn btn-secondary">Удалить</button></a>
+                                      </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}
