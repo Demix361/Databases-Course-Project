@@ -60,7 +60,7 @@ class LoyaltyCard(models.Model):
     discount = models.FloatField()
 
     def __str__(self):
-        return f'Card level: {self.name}'
+        return f'{self.name}'
 
 
 class Profile(models.Model):
