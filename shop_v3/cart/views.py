@@ -27,12 +27,16 @@ def add_to_cart(request, **kwargs):
     product = Product.objects.filter(id=kwargs.get('pk')).first()
     user = request.user
     cart = Cart.objects.filter(user=user, active='t').first()
-    new_cart_item = CartItem(cart=cart, product=product)
-    new_cart_item.save()
 
-    print('=' * 50)
-    print(product.name)
-    print(user.email)
-    print(cart)
+    if product.id not in Cart.objects.filter(user=user, active='t').first().cartitem_set.all().values_list('product', flat=True):
+        new_cart_item = CartItem(cart=cart, product=product)
+        new_cart_item.save()
 
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+        print('=' * 50)
+        print(product.name)
+        print(user.email)
+        print(cart)
+    else:
+        print('product already in cart')
+
+    return redirect(request.META.get('HTTP_REFERER', 'shop-home'))
