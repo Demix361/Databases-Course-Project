@@ -36,7 +36,11 @@
                             <h4><a class="card-title" href="{% url 'shop-product' product.id %}">{{ product.name }}</a></h4>
                             <a href="{% url 'shop-category' product.category %}"><p class="card-text">{{ product.category }}</p></a>
                             <h3 class="text-left">{{ product.cost }}</h3>
-                            <a href="{% url 'add-to-cart' product.id %}" class="btn btn-primary">Добавить в корзину</a>
+                            {% if product.id in products_in_cart %}
+                                <a href="{% url 'cart' %}" class="btn btn-success">Перейти в корзину</a>
+                            {% else %}
+                                <a href="{% url 'add-to-cart' product.id %}" class="btn btn-primary">Добавить в корзину</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

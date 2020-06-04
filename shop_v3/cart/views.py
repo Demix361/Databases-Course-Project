@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
@@ -18,23 +19,20 @@ class CartListView(ListView):
         return super(CartListView, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
+        return Cart.objects.filter(user=self.request.user, active='t')
 
 
 @login_required()
 def add_to_cart(request, **kwargs):
-    # get the user profile
-    user = get_object_or_404(MyUser, profile=request.profile)
+    product = Product.objects.filter(id=kwargs.get('pk')).first()
+    user = request.user
+    cart = Cart.objects.filter(user=user, active='t').first()
+    new_cart_item = CartItem(cart=cart, product=product)
+    new_cart_item.save()
 
     print('=' * 50)
-    print(user)
+    print(product.name)
+    print(user.email)
+    print(cart)
 
-    # filter products by id
-    #product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
-
-
-    # card_item = CartItem.objects.create(cart=, is_ordered=False)
-
-
-    # show confirmation message and redirect back to the same page
-    #return redirect(reverse('products:product-list'))
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))

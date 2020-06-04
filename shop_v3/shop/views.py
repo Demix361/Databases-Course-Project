@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from .models import Product, Category
+from cart.models import Cart
 
 
 class ProductListView(ListView):
@@ -12,6 +13,8 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category_list'] = Category.objects.order_by('name')
+        context['products_in_cart'] = Cart.objects.filter(user=self.request.user, active='t').first().cartitem_set.all().values_list('product', flat=True)
+
         return context
 
 
@@ -28,6 +31,9 @@ class ProductCategoryListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category_list'] = Category.objects.order_by('name')
+        context['products_in_cart'] = Cart.objects.filter(user=self.request.user,
+                                                          active='t').first().cartitem_set.all().values_list('product',
+                                                                                                             flat=True)
         return context
 
 
@@ -37,4 +43,7 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category_list'] = Category.objects.order_by('name')
+        context['products_in_cart'] = Cart.objects.filter(user=self.request.user,
+                                                          active='t').first().cartitem_set.all().values_list('product',
+                                                                                                             flat=True)
         return context
