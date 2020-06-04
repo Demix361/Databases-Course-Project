@@ -14,12 +14,18 @@ class Product:
 		self.image = image
 
 
-class Category:
+class CategoryForProduct:
 	def __init__(self, id, name, cost_range, description):
 		self.id = id
 		self.name = name
 		self.cost_range = cost_range
 		self.description = description
+
+
+class Category:
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
 
 
 colors = {
@@ -45,11 +51,11 @@ def get_cat_imgs(id):
 def get_category_pool():
 	description = 'Без описания'
 	categories = [
-		Category(1, 'Кровати', (9990, 35990), [description]),
-		Category(2, 'Столы', (5990, 18990), [description]),
-		Category(3, 'Стулья', (1990, 5990), [description]),
-		Category(4, 'Диваны', (19990, 41990), [description]),
-		Category(5, 'Шкафы', (16990, 50990), [description])
+		CategoryForProduct(1, 'Кровати', (9990, 35990), [description]),
+		CategoryForProduct(2, 'Столы', (5990, 18990), [description]),
+		CategoryForProduct(3, 'Стулья', (1990, 5990), [description]),
+		CategoryForProduct(4, 'Диваны', (19990, 41990), [description]),
+		CategoryForProduct(5, 'Шкафы', (16990, 50990), [description])
 	]
 
 	return categories
@@ -103,7 +109,21 @@ def generate_product(start, end):
 	return products
 
 
-def json_output(product):
+def generate_category():
+	cat_info = get_category_pool()
+	categories = []
+
+	for i in range(len(cat_info)):
+		c = Category(
+			id=cat_info[i].id,
+			name=cat_info[i].name
+			)
+		categories.append(c)
+
+	return categories
+
+
+def json_output_product(product):
 	res = '['
 
 	for p in product:
@@ -115,9 +135,25 @@ def json_output(product):
 	return res
 
 
+def json_output_category(objects):
+	res = '['
+
+	for o in objects:
+		row = f'{{"model": "shop.product", "pk": {p.id}, "fields": {{"name": "{p.name}", "category": "{p.category}", "color": "{p.color}", "cost": {p.cost}, "description": "{p.description}", "images": "product_pics/{p.image}"}}}}'
+		res += row + ', '
+
+	res = res[:len(res) - 2] + ']'
+
+	return res
+
+
+
 def main():
-	products = generate_product(0, 100)
-	out = json_output(products)
+	#product = generate_product(0, 100)
+	category = generate_category()
+
+	out_product = json_output_product(products)
+	out_category = json_output_category(category)
 
 	with open('product.json', 'w') as f:
 		f.write(out)
