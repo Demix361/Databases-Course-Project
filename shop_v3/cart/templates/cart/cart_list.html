@@ -23,7 +23,7 @@
                                       <div class="btn-group" role="group" aria-label="Basic example">
                                           <a href="#" class="btn btn-secondary">-</button></a>
                                           <a href="#" class="btn btn-secondary">+</button></a>
-                                          <a href="#" class="btn btn-secondary">Удалить</button></a>
+                                          <a href="{% url 'remove-from-cart' obj.product.id %}" class="btn btn-secondary">Удалить</button></a>
                                       </div>
 
                                   </div>

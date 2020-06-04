@@ -32,11 +32,25 @@ def add_to_cart(request, **kwargs):
         new_cart_item = CartItem(cart=cart, product=product)
         new_cart_item.save()
 
-        print('=' * 50)
-        print(product.name)
-        print(user.email)
-        print(cart)
+        print('ITEM ADDED TO CART')
     else:
-        print('product already in cart')
+        print('ITEM ALREADY IN CART')
 
     return redirect(request.META.get('HTTP_REFERER', 'shop-home'))
+
+
+@login_required()
+def remove_from_cart(request, **kwargs):
+    product = Product.objects.filter(id=kwargs.get('pk')).first()
+    user = request.user
+    cart = Cart.objects.filter(user=user, active='t').first()
+
+    if product.id in Cart.objects.filter(user=user, active='t').first().cartitem_set.all().values_list('product', flat=True):
+        CartItem.objects.filter(cart=cart, product=product).delete()
+
+        print('ITEM DELETED')
+    else:
+        print('ITEM NOT IN CART')
+
+    return redirect(request.META.get('HTTP_REFERER', 'shop-home'))
+
