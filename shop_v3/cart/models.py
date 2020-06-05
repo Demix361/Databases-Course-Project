@@ -9,7 +9,7 @@ class Cart(models.Model):
 	# total_cost = models.FloatField()
 
 	def __str__(self):
-		return self.user.email + ' Cart'
+		return f'Cart id: {self.id} of user {self.user.email}'
 
 
 class CartItem(models.Model):

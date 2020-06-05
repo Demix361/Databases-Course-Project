@@ -21,6 +21,20 @@ class CartListView(ListView):
     def get_queryset(self):
         return Cart.objects.filter(user=self.request.user, active='t')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        cart_items = Cart.objects.filter(user=user, active='t').first().cartitem_set.all()
+
+        context['item_quantity'] = sum([i for i in Cart.objects.filter(user=user, active='t').first().cartitem_set.all().values_list('quantity', flat=True)])
+        context['total_cost'] = 0
+        for item in cart_items:
+            context['total_cost'] += Product.objects.get(id=item.product.id).cost * item.quantity
+        if user.profile.loyalty_card:
+            context['total_cost'] = context['total_cost'] * (100 - user.profile.loyalty_card.discount) / 100
+
+        return context
+
 
 @login_required()
 def add_to_cart(request, **kwargs):

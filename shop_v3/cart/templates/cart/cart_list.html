@@ -1,49 +1,156 @@
-{% extends "shop/base.html" %}
-{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 
-<h1 class="my-4">Товары в Вашей корзине</h1>
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
 
-<div class="album py-5 bg-light">
-    <div class="container">
-        {% for cart in carts %}
-            {% if cart.active %}
-                {% for obj in cart.cartitem_set.all %}
+    <link href="{% static 'shop/main.css' %}" rel="stylesheet" type="text/css">
+
+    {% if title %}
+    <title>Django Blog -- {{ title }}</title>
+    {% else %}
+    <title>Django Blog</title>
+    {% endif %}
+</head>
+<body>
+<header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="{% url 'shop-home' %}">МАГАЗИН</a>
+            <button aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                    data-target="#navbarToggle" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" href="{% url 'shop-home' %}">Все товары</a>
+                    {% if category_list %}
+                    <div class="dropdown">
+                        <a aria-expanded="false" aria-haspopup="true" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                           href="#" id="dropdownMenuLink" role="button">
+                            Категории
+                        </a>
+
+
+                        <div aria-labelledby="dropdownMenuLink" class="dropdown-menu">
+                            {% for c in category_list %}
+                            <a class="dropdown-item" href="{% url 'shop-category' c.name %}">{{ c.name }}</a>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Navbar Right Side -->
+                <div class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'cart' %}">Корзина</a>
+                    <a class="nav-item nav-link" href="{% url 'profile' %}">Профиль</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}">Выйти</a>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Войти</a>
+                    <a class="nav-item nav-link" href="{% url 'register' %}">Регистрация</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="container" role="main">
+    <h1 class="my-4">Товары в Вашей корзине</h1>
+    <div class="row">
+
+        <div class="col-md-8">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            <div class="album py-5 bg-light">
+                <div class="container">
+                    {% for cart in carts %}
+                    {% if cart.active %}
+                    {% for obj in cart.cartitem_set.all %}
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-md-12">
                             <div class="card mb-3" style="max-width: 540px;">
-                              <div class="row no-gutters">
-                                <div class="col-md-4">
-                                  <a href="{% url 'shop-product' obj.product.id %}"><img src="{{ obj.product.image.url }}" class="card-img" alt="..."></a>
+                                <div class="row no-gutters">
+                                    <div class="col-md-4">
+                                        <a href="{% url 'shop-product' obj.product.id %}"><img
+                                                alt="..." class="card-img" src="{{ obj.product.image.url }}"></a>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ obj.product.name }}</h5>
+                                            <p class="card-text">Стоимость: {{ obj.product.cost }}</p>
+                                            <p class="card-text">Количество: {{ obj.quantity }}</p>
+                                            <div aria-label="Basic example" class="btn-group" role="group">
+                                                {% if obj.quantity > 1 %}
+                                                <a class="btn btn-secondary"
+                                                   href="{% url 'decrease-quantity' obj.product.id %}">-</button></a>
+                                                {% else %}
+                                                <a class="btn btn-secondary disabled"
+                                                   href="{% url 'decrease-quantity' obj.product.id %}">-</button></a>
+                                                {% endif %}
+                                                {% if obj.quantity < 20 %}
+                                                <a class="btn btn-secondary"
+                                                   href="{% url 'increase-quantity' obj.product.id %}">+</button></a>
+                                                {% else %}
+                                                <a class="btn btn-secondary disabled"
+                                                   href="{% url 'increase-quantity' obj.product.id %}">-</button></a>
+                                                {% endif %}
+                                                <a class="btn btn-secondary"
+                                                   href="{% url 'remove-from-cart' obj.product.id %}">Удалить</button></a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-8">
-                                  <div class="card-body">
-                                    <h5 class="card-title">{{ obj.product.name }}</h5>
-                                    <p class="card-text">Стоимость: {{ obj.product.cost }}</p>
-                                    <p class="card-text">Количество: {{ obj.quantity }}</p>
-                                      <div class="btn-group" role="group" aria-label="Basic example">
-                                          {% if obj.quantity > 1 %}
-                                            <a href="{% url 'decrease-quantity' obj.product.id %}" class="btn btn-secondary">-</button></a>
-                                          {% else %}
-                                            <a href="{% url 'decrease-quantity' obj.product.id %}" class="btn btn-secondary disabled">-</button></a>
-                                          {% endif %}
-                                          {% if obj.quantity < 20 %}
-                                            <a href="{% url 'increase-quantity' obj.product.id %}" class="btn btn-secondary">+</button></a>
-                                          {% else %}
-                                            <a href="{% url 'increase-quantity' obj.product.id %}" class="btn btn-secondary disabled">-</button></a>
-                                          {% endif %}
-                                          <a href="{% url 'remove-from-cart' obj.product.id %}" class="btn btn-secondary">Удалить</button></a>
-                                      </div>
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="col-md-4">
+            <div class="content-section">
+                <h3>Информация о заказе</h3>
+
+                <ul class="list-group">
+                    <li class="list-group-item">В корзине {{ item_quantity }} товаров</li>
+                    <li class="list-group-item">Стоимость: {{ total_cost }}</li>
+                </ul>
+            </div>
+        </div>
+
     </div>
-</div>
+</main>
 
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script crossorigin="anonymous"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-{% endblock content %}
+</body>
+</html>
