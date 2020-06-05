@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from .models import Cart, CartItem, Order
-from users.models import MyUser
+from users.models import MyUser, LoyaltyCard
 from shop.models import Product
 
 
@@ -59,6 +59,41 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         Cart.objects.filter(user=user, active='t').update(active='f')
         new_cart = Cart(user=user)
         new_cart.save()
+
+        # update loyalty card if needed
+        money_sum = 0
+        for obj in Cart.objects.filter(user=user):
+            ord = Order.objects.filter(cart=obj).first()
+            if ord:
+                money_sum += ord.amount           
+        money_sum += total
+
+        cur_cart = user.profile.loyalty_card.name
+        if cur_cart != 'Алмазный':
+            if cur_cart == 'Отсутствует':
+                next_cart = 'Бронзовый'
+                limit = 10000
+            elif cur_cart == 'Бронзовый':
+                next_cart = 'Серебряный'
+                limit = 40000
+            elif cur_cart == 'Серебряный':
+                next_cart = 'Золотой'
+                limit = 70000
+            elif cur_cart == 'Золотой':
+                next_cart = 'Платиновый'
+                limit = 150000
+            elif cur_cart == 'Платиновый':
+                next_cart = 'Алмазный'
+                limit = 300000
+            print()
+            print(cur_cart)
+            print(next_cart)
+            print(limit)
+            print(money_sum)
+            print()
+            if money_sum > limit:
+                user.profile.loyalty_card = LoyaltyCard.objects.get(name=next_cart)
+                user.profile.save()
 
         return super().form_valid(form)
 

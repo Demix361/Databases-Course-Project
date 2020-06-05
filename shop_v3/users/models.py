@@ -66,7 +66,7 @@ class LoyaltyCard(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, default=None, blank=True, null=True)
-    loyalty_card = models.ForeignKey(LoyaltyCard, on_delete=models.SET_NULL, null=True)
+    loyalty_card = models.ForeignKey(LoyaltyCard, on_delete=models.SET_NULL, null=True, default=6)
 
     def __str__(self):
         return f'{self.user.email} Profile'
