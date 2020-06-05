@@ -65,6 +65,7 @@
 </header>
 
 <main class="container" role="main">
+    {% if item_quantity != 0 %}
     <h1 class="my-4">Товары в Вашей корзине</h1>
     <div class="row">
 
@@ -78,9 +79,7 @@
             {% endif %}
             <div class="album py-5 bg-light">
                 <div class="container">
-                    {% for cart in carts %}
-                    {% if cart.active %}
-                    {% for obj in cart.cartitem_set.all %}
+                    {% for obj in cart_items %}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card mb-3" style="max-width: 540px;">
@@ -119,8 +118,6 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% endif %}
-                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -130,14 +127,19 @@
             <div class="content-section">
                 <h3>Информация о заказе</h3>
 
-                <ul class="list-group">
+                <ul class="list-group mb-3">
                     <li class="list-group-item">В корзине {{ item_quantity }} товаров</li>
                     <li class="list-group-item">Стоимость: {{ total_cost }}</li>
                 </ul>
+
+                <a class="btn btn-primary" href="{% url 'order-create' %}">Оформить заказ</button></a>
             </div>
         </div>
 
     </div>
+    {% else %}
+    <h1 class="my-4">Ваша корзина пуста</h1>
+    {% endif %}
 </main>
 
 <!-- Optional JavaScript -->

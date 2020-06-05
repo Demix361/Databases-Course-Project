@@ -1,25 +1,26 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
-from .models import Cart, CartItem
+from .models import Cart, CartItem, Order
 from users.models import MyUser
 from shop.models import Product
 
 
-class CartListView(ListView):
-    model = Cart
-    context_object_name = 'carts'
-    # paginate_by = 18
+class CartListView(LoginRequiredMixin, ListView):
+    model = CartItem
+    template_name = 'cart/cart_list.html'
+    context_object_name = 'cart_items'
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(CartListView, self).dispatch(*args, **kwargs)
+    # @method_decorator(login_required)
+    # def dispatch(self, *args, **kwargs):
+    #     return super(CartListView, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user, active='t')
+        return CartItem.objects.filter(cart=Cart.objects.get(user=self.request.user, active='t').id).order_by('product')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -34,6 +35,32 @@ class CartListView(ListView):
             context['total_cost'] = context['total_cost'] * (100 - user.profile.loyalty_card.discount) / 100
 
         return context
+
+
+class OrderCreateView(LoginRequiredMixin, CreateView):
+    model = Order
+    fields = ['payment_method', 'address', 'notes']
+
+    def form_valid(self, form):
+        user = self.request.user
+        cart_items = Cart.objects.filter(user=user, active='t').first().cartitem_set.all()
+
+        form.instance.cart = Cart.objects.get(user=user, active='t')
+        total = 0
+        for item in cart_items:
+            total += Product.objects.get(id=item.product.id).cost * item.quantity
+        if user.profile.loyalty_card:
+            total *= (100 - user.profile.loyalty_card.discount) / 100
+        if total == 0:
+            total = None
+        form.instance.amount = total
+
+        # disable current cart and add new
+        Cart.objects.filter(user=user, active='t').update(active='f')
+        new_cart = Cart(user=user)
+        new_cart.save()
+
+        return super().form_valid(form)
 
 
 @login_required()
