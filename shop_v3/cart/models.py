@@ -7,10 +7,42 @@ from django.urls import reverse
 class Cart(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
-    # total_cost = models.FloatField()
 
     def __str__(self):
-        return f'Cart id: {self.id} of user {self.user.email}'
+        state = 'Не активная'
+        if self.active:
+            state = 'Активная'
+        return f'{state} корзина {self.user.email}'
+
+    def get_cart_items(self):
+        return CartItem.objects.filter(cart=self).order_by('product')
+
+    def get_total_no_discount(self):
+        total = 0
+        for item in self.get_cart_items():
+            total += item.quantity * item.product.cost
+
+        return round(total, 2)
+
+    def get_total(self):
+        total = 0
+        for item in self.get_cart_items():
+            total += item.quantity * item.product.cost * (100 - self.user.profile.loyalty_card.discount) / 100
+
+        return round(total, 2)
+
+    def get_item_number(self):
+        number = 0
+        for item in self.get_cart_items():
+            number += item.quantity
+
+        return number
+
+    def is_empty(self):
+        if len(self.get_cart_items()) == 0:
+            return True
+        else:
+            return False
 
 
 class CartItem(models.Model):
@@ -46,3 +78,12 @@ class Order(models.Model):
 
     def get_absolute_url(self):
         return reverse('shop-home')
+
+    def get_ru_payment(self):
+        name_ru = ''
+        if self.payment_method == 'card':
+            name_ru = 'Картой'
+        elif self.payment_method == 'cash':
+            name_ru = 'Наличными'
+
+        return name_ru

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.decorators import method_decorator
 from .models import Cart, CartItem, Order
 from users.models import MyUser, LoyaltyCard
@@ -11,30 +11,24 @@ from shop.models import Product
 
 
 class CartListView(LoginRequiredMixin, ListView):
-    model = CartItem
+    model = Cart
     template_name = 'cart/cart_list.html'
-    context_object_name = 'cart_items'
-
-    # @method_decorator(login_required)
-    # def dispatch(self, *args, **kwargs):
-    #     return super(CartListView, self).dispatch(*args, **kwargs)
+    context_object_name = 'cart'
 
     def get_queryset(self):
-        return CartItem.objects.filter(cart=Cart.objects.get(user=self.request.user, active='t').id).order_by('product')
+        return Cart.objects.get(user=self.request.user, active='t')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        cart_items = Cart.objects.filter(user=user, active='t').first().cartitem_set.all()
 
-        context['item_quantity'] = sum([i for i in Cart.objects.filter(user=user, active='t').first().cartitem_set.all().values_list('quantity', flat=True)])
-        context['total_cost'] = 0
-        for item in cart_items:
-            context['total_cost'] += Product.objects.get(id=item.product.id).cost * item.quantity
-        if user.profile.loyalty_card:
-            context['total_cost'] = context['total_cost'] * (100 - user.profile.loyalty_card.discount) / 100
+class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Order
+    template_name = 'cart/order_detail.html'
+    context_object_name = 'order'
 
-        return context
+    def test_func(self):
+        order = self.get_object()
+        if self.request.user == order.cart.user:
+            return True
+        return False
 
 
 class OrderCreateView(LoginRequiredMixin, CreateView):
@@ -96,6 +90,16 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
                 user.profile.save()
 
         return super().form_valid(form)
+
+
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'cart/order_list.html'
+    context_object_name = 'orders'
+    paginate_by = 12
+
+    def get_queryset(self):
+        return Order.objects.filter(cart__user=self.request.user).order_by('-order_time')
 
 
 @login_required()

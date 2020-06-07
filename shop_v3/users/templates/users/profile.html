@@ -6,8 +6,8 @@
             <div class="media-body">
                 <h2 class="account-heading">{{ user.email }}</h2>
                 {% if user.profile.loyalty_card %}
-                    <p class="text-secondary">Уровень карты лояльности: {{ user.profile.loyalty_card }}</p>
-                    <p class="text-secondary">Скидка: {{ user.profile.loyalty_card.discount }}%</p>
+                    <p class="text">Уровень карты лояльности: {{ user.profile.loyalty_card }}. Скидка по карте: {{ user.profile.loyalty_card.discount }}%</p>
+                    <a href="{% url 'orders' %}"><p class="text">Прошлые заказы</p></a>
                 {% endif %}
             </div>
         </div>

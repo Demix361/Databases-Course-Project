@@ -65,7 +65,7 @@
 </header>
 
 <main class="container" role="main">
-    {% if item_quantity != 0 %}
+    {% if not cart.is_empty %}
     <h1 class="my-4">Товары в Вашей корзине</h1>
     <div class="row">
 
@@ -79,37 +79,37 @@
             {% endif %}
             <div class="album py-5 bg-light">
                 <div class="container">
-                    {% for obj in cart_items %}
+                    {% for item in cart.get_cart_items %}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card mb-3" style="max-width: 540px;">
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
-                                        <a href="{% url 'shop-product' obj.product.id %}"><img
-                                                alt="..." class="card-img" src="{{ obj.product.image.url }}"></a>
+                                        <a href="{% url 'shop-product' item.product.id %}"><img
+                                                alt="..." class="card-img" src="{{ item.product.image.url }}"></a>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <h5 class="card-title">{{ obj.product.name }}</h5>
-                                            <p class="card-text">Стоимость: {{ obj.product.cost }}</p>
-                                            <p class="card-text">Количество: {{ obj.quantity }}</p>
+                                            <h5 class="card-title">{{ item.product.name }}</h5>
+                                            <p class="card-text">Стоимость: {{ item.product.cost }}</p>
+                                            <p class="card-text">Количество: {{ item.quantity }}</p>
                                             <div aria-label="Basic example" class="btn-group" role="group">
-                                                {% if obj.quantity > 1 %}
+                                                {% if item.quantity > 1 %}
                                                 <a class="btn btn-secondary"
-                                                   href="{% url 'decrease-quantity' obj.product.id %}">-</button></a>
+                                                   href="{% url 'decrease-quantity' item.product.id %}">-</a>
                                                 {% else %}
                                                 <a class="btn btn-secondary disabled"
-                                                   href="{% url 'decrease-quantity' obj.product.id %}">-</button></a>
+                                                   href="{% url 'decrease-quantity' item.product.id %}">-</a>
                                                 {% endif %}
-                                                {% if obj.quantity < 20 %}
+                                                {% if item.quantity < 20 %}
                                                 <a class="btn btn-secondary"
-                                                   href="{% url 'increase-quantity' obj.product.id %}">+</button></a>
+                                                   href="{% url 'increase-quantity' item.product.id %}">+</a>
                                                 {% else %}
                                                 <a class="btn btn-secondary disabled"
-                                                   href="{% url 'increase-quantity' obj.product.id %}">-</button></a>
+                                                   href="{% url 'increase-quantity' item.product.id %}">-</a>
                                                 {% endif %}
                                                 <a class="btn btn-secondary"
-                                                   href="{% url 'remove-from-cart' obj.product.id %}">Удалить</button></a>
+                                                   href="{% url 'remove-from-cart' item.product.id %}">Удалить</a>
                                             </div>
                                         </div>
                                     </div>
@@ -128,11 +128,11 @@
                 <h3>Информация о заказе</h3>
 
                 <ul class="list-group mb-3">
-                    <li class="list-group-item">В корзине {{ item_quantity }} товаров</li>
-                    <li class="list-group-item">Стоимость: {{ total_cost }}</li>
+                    <li class="list-group-item">В корзине {{ cart.get_item_number }} товаров</li>
+                    <li class="list-group-item">Стоимость: {{ cart.get_total }}</li>
                 </ul>
 
-                <a class="btn btn-primary" href="{% url 'order-create' %}">Оформить заказ</button></a>
+                <a class="btn btn-primary" href="{% url 'order-create' %}">Оформить заказ</a>
             </div>
         </div>
 
