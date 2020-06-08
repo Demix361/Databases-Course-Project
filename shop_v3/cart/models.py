@@ -53,6 +53,15 @@ class CartItem(models.Model):
     def __str__(self):
         return f'{self.product.name} in cart id:{self.cart.id} of {self.cart.user.email}'
 
+    def get_full_price(self):
+        return round(self.product.cost * self.quantity, 2)
+
+    def get_price_card(self):
+        return round(self.product.cost * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
+
+    def get_full_price_card(self):
+        return round(self.product.cost * self.quantity * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
+
 
 class Order(models.Model):
     CARD = 'card'

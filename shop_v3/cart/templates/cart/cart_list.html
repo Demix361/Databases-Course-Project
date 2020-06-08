@@ -80,20 +80,20 @@
             <div class="album py-5 bg-light">
                 <div class="container">
                     {% for item in cart.get_cart_items %}
-                    <div class="row">
-                        <div class="col-md-12">
+
                             <div class="card mb-3" style="max-width: 540px;">
-                                <div class="row no-gutters">
+                                <div class="row">
                                     <div class="col-md-4">
                                         <a href="{% url 'shop-product' item.product.id %}"><img
                                                 alt="..." class="card-img" src="{{ item.product.image.url }}"></a>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <h5 class="card-title">{{ item.product.name }}</h5>
-                                            <p class="card-text">Стоимость: {{ item.product.cost }}</p>
-                                            <p class="card-text">Количество: {{ item.quantity }}</p>
-                                            <div aria-label="Basic example" class="btn-group" role="group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <a href="{% url 'shop-product' item.product.id %}"><h5 class="card-title">{{ item.product.name }}</h5></a>
+                                                    <p class="card-text">Количество: {{ item.quantity }}</p>
+                                                    <div aria-label="Basic example" class="btn-group" role="group">
                                                 {% if item.quantity > 1 %}
                                                 <a class="btn btn-secondary"
                                                    href="{% url 'decrease-quantity' item.product.id %}">-</a>
@@ -111,12 +111,24 @@
                                                 <a class="btn btn-secondary"
                                                    href="{% url 'remove-from-cart' item.product.id %}">Удалить</a>
                                             </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div class="align-right">
+                                                        {% if item.get_full_price != item.get_full_price_card %}
+                                                        <p class="card-text"><small class="text-muted"><del>{{ item.get_full_price }} ₽</del></small></p>
+                                                        {% endif %}
+                                                        <p class="price">{{ item.get_full_price_card }} ₽</p>
+                                                        {% if item.quantity > 1 %}
+                                                        <p class="card-text">{{ item.get_price_card }} x {{ item.quantity }} ₽</p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+
                     {% endfor %}
                 </div>
             </div>
@@ -128,8 +140,14 @@
                 <h3>Информация о заказе</h3>
 
                 <ul class="list-group mb-3">
+                    {% if cart.get_item_number == 1 %}
+                    <li class="list-group-item">В корзине {{ cart.get_item_number }} товар</li>
+                    {% elif cart.get_item_number > 4 %}
                     <li class="list-group-item">В корзине {{ cart.get_item_number }} товаров</li>
-                    <li class="list-group-item">Стоимость: {{ cart.get_total }}</li>
+                    {% else %}
+                    <li class="list-group-item">В корзине {{ cart.get_item_number }} товара</li>
+                    {% endif %}
+                    <li class="list-group-item">Стоимость: {{ cart.get_total }} ₽</li>
                 </ul>
 
                 <a class="btn btn-primary" href="{% url 'order-create' %}">Оформить заказ</a>

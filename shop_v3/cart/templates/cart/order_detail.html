@@ -22,25 +22,22 @@
             <div class="album py-5 bg-light">
                 <div class="container">
                     {% for item in order.cart.get_cart_items %}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card mb-3" style="max-width: 540px;">
-                                <div class="row no-gutters">
+                    <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row">
                                     <div class="col-md-4">
                                         <a href="{% url 'shop-product' item.product.id %}"><img
                                                 alt="..." class="card-img" src="{{ item.product.image.url }}"></a>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <a href="{% url 'shop-product' item.product.id %}"><h5 class="card-title">{{ item.product.name }}</h5></a>
-                                            <p class="card-text">Стоимость: {{ item.product.cost }}</p>
-                                            <p class="card-text">Количество: {{ item.quantity }}</p>
+
+                                                    <a href="{% url 'shop-product' item.product.id %}"><h5 class="card-title">{{ item.product.name }}</h5></a>
+                                                    <p class="card-text">Количество: {{ item.quantity }}</p>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
                     {% endfor %}
                 </div>
             </div>
