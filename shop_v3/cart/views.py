@@ -31,7 +31,7 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return False
 
 
-class OrderCreateView(LoginRequiredMixin, CreateView):
+class OrderCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Order
     fields = ['payment_method', 'address', 'notes']
 
@@ -90,6 +90,12 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
                 user.profile.save()
 
         return super().form_valid(form)
+
+    def test_func(self):
+        cart = Cart.objects.filter(user=self.request.user, active='t').first()
+        if cart.get_item_number() > 0:
+            return True
+        return False
 
 
 class OrderListView(LoginRequiredMixin, ListView):
