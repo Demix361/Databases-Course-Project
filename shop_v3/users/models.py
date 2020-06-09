@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from django.conf import settings
+from cart.models import Order, Cart, CartItem
 
 
 class MyUserManager(BaseUserManager):
@@ -64,9 +66,47 @@ class LoyaltyCard(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, default=None, blank=True, null=True)
     loyalty_card = models.ForeignKey(LoyaltyCard, on_delete=models.SET_NULL, null=True, default=6)
 
     def __str__(self):
         return f'{self.user.email} Profile'
+
+    def upgrade_loyalty_card_by_one_level(self):
+        card = self.loyalty_card.name
+        if card != 'Алмазный':
+            if card == 'Отсутствует':
+                next_cart = 'Бронзовый'
+            elif card == 'Бронзовый':
+                next_cart = 'Серебряный'
+            elif card == 'Серебряный':
+                next_cart = 'Золотой'
+            elif card == 'Золотой':
+                next_cart = 'Платиновый'
+            elif card == 'Платиновый':
+                next_cart = 'Алмазный'
+            self.loyalty_card = LoyaltyCard.objects.get(name=next_cart)
+            self.save()
+
+    def upgrade_loyalty_card(self):
+        spent = 0
+        for obj in Cart.objects.filter(user=self.user):
+            order = Order.objects.filter(cart=obj).first()
+            if order:
+                spent += order.amount
+        spent += Cart.objects.get(user=self.user, active='t').get_total()
+
+        if self.loyalty_card.name != 'Алмазный' or spent != 0:
+            arr = [[0, 10000, 40000, 70000, 150000, 300000],
+                   ['Отсутствует', 'Бронзовый', 'Серебряный', 'Золотой', 'Платиновый', 'Алмазный']]
+            n = len(arr[0])
+
+            for i in range(n - 1, -1, -1):
+                if spent >= arr[0][i]:
+                    new_limit = arr[0][i]
+                    new_level = arr[1][arr[0].index(new_limit)]
+
+                    if arr[0][arr[1].index(self.loyalty_card.name)] <= arr[0][arr[1].index(new_level)]:
+                        self.loyalty_card = LoyaltyCard.objects.get(name=new_level)
+                        self.save()

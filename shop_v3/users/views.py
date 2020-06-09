@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .admin import UserCreationForm, UserChangeForm, ProfileUpdateForm
 
 
+# TODO class-based register and profile views
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)

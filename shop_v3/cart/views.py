@@ -37,62 +37,24 @@ class OrderCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         user = self.request.user
-        cart_items = Cart.objects.filter(user=user, active='t').first().cartitem_set.all()
+        cart = Cart.objects.get(user=user, active='t')
 
-        form.instance.cart = Cart.objects.get(user=user, active='t')
-        total = 0
-        for item in cart_items:
-            total += Product.objects.get(id=item.product.id).cost * item.quantity
-        if user.profile.loyalty_card:
-            total *= (100 - user.profile.loyalty_card.discount) / 100
-        if total == 0:
-            total = None
-        form.instance.amount = total
+        form.instance.cart = cart
+        form.instance.amount = cart.get_total()
+
+        # upgrade loyalty card if needed
+        user.profile.upgrade_loyalty_card()
 
         # disable current cart and add new
-        Cart.objects.filter(user=user, active='t').update(active='f')
+        cart.active = 'f'
+        cart.save()
         new_cart = Cart(user=user)
         new_cart.save()
-
-        # update loyalty card if needed
-        money_sum = 0
-        for obj in Cart.objects.filter(user=user):
-            ord = Order.objects.filter(cart=obj).first()
-            if ord:
-                money_sum += ord.amount           
-        money_sum += total
-
-        cur_cart = user.profile.loyalty_card.name
-        if cur_cart != 'Алмазный':
-            if cur_cart == 'Отсутствует':
-                next_cart = 'Бронзовый'
-                limit = 10000
-            elif cur_cart == 'Бронзовый':
-                next_cart = 'Серебряный'
-                limit = 40000
-            elif cur_cart == 'Серебряный':
-                next_cart = 'Золотой'
-                limit = 70000
-            elif cur_cart == 'Золотой':
-                next_cart = 'Платиновый'
-                limit = 150000
-            elif cur_cart == 'Платиновый':
-                next_cart = 'Алмазный'
-                limit = 300000
-            print()
-            print(cur_cart)
-            print(next_cart)
-            print(limit)
-            print(money_sum)
-            print()
-            if money_sum > limit:
-                user.profile.loyalty_card = LoyaltyCard.objects.get(name=next_cart)
-                user.profile.save()
 
         return super().form_valid(form)
 
     def test_func(self):
-        cart = Cart.objects.filter(user=self.request.user, active='t').first()
+        cart = Cart.objects.get(user=self.request.user, active='t')
         if cart.get_item_number() > 0:
             return True
         return False

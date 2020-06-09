@@ -1,11 +1,11 @@
 from django.db import models
-from users.models import MyUser
+from django.conf import settings
 from shop.models import Product
 from django.urls import reverse
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 
     def __str__(self):
