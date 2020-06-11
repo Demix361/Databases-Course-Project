@@ -1,4 +1,5 @@
 from django.db import models
+from reviews.models import Review
 
 
 class Category(models.Model):
@@ -18,3 +19,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_reviews(self):
+        return Review.objects.filter(product=self)
