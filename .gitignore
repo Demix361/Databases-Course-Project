@@ -19,6 +19,10 @@ shop_v3/shop/.idea
 shop_v3/shop/__pycache__
 shop_v3/shop/migrations/__pycache__
 
+shop_v3/review/.idea
+shop_v3/review/__pycache__
+shop_v3/review/migrations/__pycache__
+
 shop_v3/shop_v3/.idea
 shop_v3/shop_v3/__pycache__
 

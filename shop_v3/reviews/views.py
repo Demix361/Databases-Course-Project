@@ -31,8 +31,6 @@ class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['rating', 'advantages', 'disadvantages', 'review']
 
     def form_valid(self, form):
-        print('=' * 60)
-        print(self.get_object())
         form.instance.author = self.request.user
         form.instance.product = Product.objects.get(id=self.kwargs['prod'])
         return super().form_valid(form)

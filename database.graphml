@@ -125,15 +125,17 @@ discount : float<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:
     <node id="n6">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="159.38999999999993" width="198.75" x="127.90246031746025" y="812.2025"/>
+          <y:Geometry height="201.20673306772898" width="169.05999999999995" x="127.90246031746025" y="812.2025"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="50.234375" x="74.2578125" xml:space="preserve" y="4.0">review</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="121.609375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="193.453125" x="2.0" xml:space="preserve" y="35.6015625">PK id : integer
-product_id : integer
-user_id : integer
+          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#00FF00" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="50.234375" x="59.41281249999997" xml:space="preserve" y="4.0">review</y:NodeLabel>
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="160.8125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="146.3125" x="2.0" xml:space="preserve" y="35.6015625">PK id : integer
+product : integer
+user : integer
 rating : integer
-recommendation : boolean
+advantages : text
+disadvantages : text
+review : text
 time : timestamp
 <y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelParameter><y:ErdAttributesNodeLabelModelParameter/></y:ModelParameter></y:NodeLabel>
           <y:StyleProperties>
@@ -202,7 +204,10 @@ name : varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:Mo
     <edge id="e2" source="n6" target="n0">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:Path sx="0.7056751407066315" sy="-51.47571513944331" tx="0.0" ty="0.0">
+            <y:Point x="324.60318725099546" y="855.4880478087641"/>
+            <y:Point x="281.27907189494044" y="583.8579999999998"/>
+          </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="crows_foot_many" target="none"/>
           <y:BendStyle smoothed="false"/>
@@ -212,7 +217,10 @@ name : varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:Mo
     <edge id="e3" source="n6" target="n2">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:Path sx="-4.385767090369399" sy="-33.68830478087648" tx="-17.732748529096426" ty="-22.576054084790258">
+            <y:Point x="110.13434262948124" y="879.117561752988"/>
+            <y:Point x="-17.151713147411186" y="913.7132589641433"/>
+          </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="crows_foot_many" target="none"/>
           <y:BendStyle smoothed="false"/>
