@@ -24,6 +24,30 @@
         {% endif %}
 
     {% endif %}
+<div class="row">
+                      <div class="dropdown">
+                          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Категории
+                          </a>
+
+
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                              {% for c in category_list %}
+                                    <a class="dropdown-item" href="{% url 'shop-category' c.name %}">{{ c.name }}</a>
+                              {% endfor %}
+                          </div>
+                      </div>
+
+<div class="dropdown">
+    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Сортировать
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="{% url 'shop-home'%}?order=cost_up">Стоимость возраст.</a>
+        <a class="dropdown-item" href="{% url 'shop-home'%}?order=cost_down">Стоимость убыв.</a>
+    </div>
+</div>
+</div>
 
 <div class="album py-5 bg-light">
     <div class="container">

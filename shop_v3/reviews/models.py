@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 
 class Review(models.Model):
@@ -13,3 +14,7 @@ class Review(models.Model):
 
 	def __str__(self):
 		return f'Отзыв {self.user.email} о {self.product.name}'
+
+	# Нужно для редиректа после заполнения формы
+	def get_absolute_url(self):
+		return reverse('shop-product', kwargs={'pk': self.product.id})

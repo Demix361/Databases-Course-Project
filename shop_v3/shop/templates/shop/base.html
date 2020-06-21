@@ -28,21 +28,6 @@
                 <div class="collapse navbar-collapse" id="navbarToggle">
                   <div class="navbar-nav mr-auto">
                     <a class="nav-item nav-link" href="{% url 'shop-home' %}">Все товары</a>
-                      {% if category_list %}
-                      <div class="dropdown">
-                          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Категории
-                          </a>
-
-
-                          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                              {% for c in category_list %}
-                                    <a class="dropdown-item" href="{% url 'shop-category' c.name %}">{{ c.name }}</a>
-                              {% endfor %}
-                          </div>
-
-                        </div>
-                      {% endif %}
                   </div>
 
                   <!-- Navbar Right Side -->

@@ -106,7 +106,7 @@
                                                    href="{% url 'increase-quantity' item.product.id %}">+</a>
                                                 {% else %}
                                                 <a class="btn btn-secondary disabled"
-                                                   href="{% url 'increase-quantity' item.product.id %}">-</a>
+                                                   href="{% url 'increase-quantity' item.product.id %}">+</a>
                                                 {% endif %}
                                                 <a class="btn btn-secondary"
                                                    href="{% url 'remove-from-cart' item.product.id %}">Удалить</a>
