@@ -34,7 +34,7 @@ class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         print('=' * 60)
         print(self.get_object())
         form.instance.author = self.request.user
-        form.instance.product = Product.objects.get(id=self.kwargs['pk'])
+        form.instance.product = Product.objects.get(id=self.kwargs['prod'])
         return super().form_valid(form)
 
     def test_func(self):
@@ -48,7 +48,6 @@ class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = '/'
 
     def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
+        if self.request.user == self.get_object().user:
             return True
         return False
