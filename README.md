@@ -1,1 +1,1 @@
-# Databases-Course-Project
+# Курсовой проект по Базам Данных - 6 сем
