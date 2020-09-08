@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
-  <!--Created by yEd 3.20-->
+  <!--Created by yEd 3.19.1-->
   <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
   <key for="port" id="d1" yfiles.type="portgraphics"/>
   <key for="port" id="d2" yfiles.type="portgeometry"/>
@@ -94,7 +94,7 @@ notes : text<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:Mode
           <y:Geometry height="121.0" width="186.3699999999999" x="-430.1533917655846" y="512.9359999999997"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#FF0000" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.34375" x="60.513124999999945" xml:space="preserve" y="4.0">CartItem</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#00FF00" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.34375" x="60.513124999999945" xml:space="preserve" y="4.0">CartItem</y:NodeLabel>
           <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="82.40625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="117.8515625" x="2.0" xml:space="preserve" y="35.6015625">PK id : integer
 cart : FK
 product : FK
@@ -192,11 +192,11 @@ name : varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:Mo
     <node id="n10">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="101.7443286486486" width="145.1199999999999" x="-844.2309160364881" y="989.7831035030002"/>
+          <y:Geometry height="101.7443286486486" width="145.1199999999999" x="-844.2309160364881" y="996.5270470324119"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#FF0000" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="109.8359375" x="17.642031249999945" xml:space="preserve" y="4.0">FeatureVariant</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="62.8046875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="110.7109375" x="2.0" xml:space="preserve" y="35.601562500000114">PK id : integer
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="62.8046875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="110.7109375" x="2.0" xml:space="preserve" y="35.6015625">PK id : integer
 feature : FK
 name : varchar<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelParameter><y:ErdAttributesNodeLabelModelParameter/></y:ModelParameter></y:NodeLabel>
           <y:StyleProperties>
@@ -234,7 +234,7 @@ order : FK
 product : FK
 quantity: integer
 item_cost : float
-item_final_cost : float
+item_cost_final : float
 <y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelParameter><y:ErdAttributesNodeLabelModelParameter/></y:ModelParameter></y:NodeLabel>
           <y:StyleProperties>
             <y:Property class="java.lang.Boolean" name="y.view.ShadowNodePainter.SHADOW_PAINTING" value="true"/>
@@ -248,7 +248,7 @@ item_final_cost : float
           <y:Geometry height="121.0" width="186.3699999999999" x="-430.1533917655846" y="337.98142308603417"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#FF0000" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="34.2265625" x="76.07171874999995" xml:space="preserve" y="4.0">Cart</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#00FF00" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasLineColor="false" height="23.6015625" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="34.2265625" x="76.07171874999995" xml:space="preserve" y="4.0">Cart</y:NodeLabel>
           <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="43.203125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="104.5" x="2.0" xml:space="preserve" y="35.6015625">PK id : integer
 user : FK<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelParameter><y:ErdAttributesNodeLabelModelParameter/></y:ModelParameter></y:NodeLabel>
           <y:StyleProperties>
@@ -362,7 +362,37 @@ user : FK<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelPa
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e9" source="n11" target="n2">
+    <edge id="e9" source="n12" target="n3">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="crows_foot_many" target="none"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e10" source="n4" target="n2">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="crows_foot_many" target="none"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e11" source="n12" target="n2">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="crows_foot_many" target="none"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e12" source="n13" target="n0">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -372,17 +402,7 @@ user : FK<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelPa
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e10" source="n11" target="n10">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="none"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e11" source="n12" target="n3">
+    <edge id="e13" source="n4" target="n13">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -392,38 +412,18 @@ user : FK<y:LabelModel><y:ErdAttributesNodeLabelModel/></y:LabelModel><y:ModelPa
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e12" source="n4" target="n2">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="crows_foot_many" target="none"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e13" source="n12" target="n2">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="crows_foot_many" target="none"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e14" source="n13" target="n0">
+    <edge id="e14" source="n11" target="n10">
       <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="none"/>
+          <y:Arrows source="crows_foot_many" target="none"/>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e15" source="n4" target="n13">
+    <edge id="e15" source="n11" target="n2">
       <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>

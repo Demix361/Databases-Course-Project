@@ -27,7 +27,7 @@
         <td>{{ order.order_time|date:"d.m.y" }}</td>
         <td>{{ order.order_time|date:"g:i:s" }}</td>
         <td>{{ order.address }}</td>
-        <td>{{ order.amount }} ₽</td>
+        <td>{{ order.get_final_total }} ₽</td>
         <td>{{ order.get_ru_payment }}</td>
         <td><a class="btn btn-secondary" href="{% url 'order-detail' order.id %}">Посмотреть</a></td>
     </tr>
