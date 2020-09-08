@@ -114,12 +114,12 @@
                                                 </div>
                                                 <div class="col-md-5">
                                                     <div class="align-right">
-                                                        {% if item.get_full_price != item.get_full_price_card %}
-                                                        <p class="card-text"><small class="text-muted"><del>{{ item.get_full_price }} ₽</del></small></p>
+                                                        {% if item.get_full_cost != item.get_full_final_cost %}
+                                                        <p class="card-text"><small class="text-muted"><del>{{ item.get_full_cost }} ₽</del></small></p>
                                                         {% endif %}
-                                                        <p class="price">{{ item.get_full_price_card }} ₽</p>
+                                                        <p class="price">{{ item.get_full_final_cost }} ₽</p>
                                                         {% if item.quantity > 1 %}
-                                                        <p class="card-text">{{ item.get_price_card }} x {{ item.quantity }} ₽</p>
+                                                        <p class="card-text">{{ item.get_final_cost }} x {{ item.quantity }} ₽</p>
                                                         {% endif %}
                                                     </div>
                                                 </div>
@@ -147,7 +147,7 @@
                     {% else %}
                     <li class="list-group-item">В корзине {{ cart.get_item_number }} товара</li>
                     {% endif %}
-                    <li class="list-group-item">Стоимость: {{ cart.get_total }} ₽</li>
+                    <li class="list-group-item">Стоимость: {{ cart.get_final_total }} ₽</li>
                 </ul>
 
                 <a class="btn btn-primary" href="{% url 'order-create' %}">Оформить заказ</a>

@@ -56,13 +56,13 @@ class CartItem(models.Model):
         return f'{self.product.name} in cart of {self.cart.user.email}'
 
     def get_final_cost(self):
-        return round(self.product.cost * (100 - self.user.profile.loyalty_card.discount) / 100, 2)
+        return round(self.product.cost * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
 
     def get_full_cost(self):
         return round(self.product.cost * self.quantity, 2)
 
     def get_full_final_cost(self):
-        return round(self.product.cost * self.quantity * (100 - self.user.profile.loyalty_card.discount) / 100, 2)
+        return round(self.product.cost * self.quantity * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
 
 
 # OK
@@ -101,18 +101,21 @@ class Order(models.Model):
 
     def get_total(self):
         total = 0
-        for item in OrderItem.filter(order=self.id):
+        for item in OrderItem.objects.filter(order=self.id):
             total += item.get_full_cost()
         return total
 
     def get_final_total(self):
         total = 0
-        for item in OrderItem.filter(order=self.id):
+        for item in OrderItem.objects.filter(order=self.id):
             total += item.get_full_final_cost()
         return total
 
+    def get_order_items(self):
+        return OrderItem.objects.filter(order=self).order_by('product')
 
-# OK
+
+    # OK
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -128,3 +131,4 @@ class OrderItem(models.Model):
 
     def get_full_final_cost(self):
         return round(self.item_cost_final * self.quantity, 2)
+
