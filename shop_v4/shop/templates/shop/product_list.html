@@ -33,7 +33,7 @@
 
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                               {% for c in category_list %}
-                                    <a class="dropdown-item" href="{% url 'shop-category' c.name %}">{{ c.name }}</a>
+                                    <a class="dropdown-item" href="{% url 'shop-category' c.id %}">{{ c.name }}</a>
                               {% endfor %}
                           </div>
                       </div>
@@ -58,7 +58,7 @@
                         <a href="{% url 'shop-product' product.id %}"><img src="{{ product.image.url }}" class="card-img-top" alt="..."></a>
                         <div class="card-body">
                             <h4><a class="card-title" href="{% url 'shop-product' product.id %}">{{ product.name }}</a></h4>
-                            <a href="{% url 'shop-category' product.category %}"><p class="card-text">{{ product.category }}</p></a>
+                            <a href="{% url 'shop-category' product.category.id %}"><p class="card-text">{{ product.category }}</p></a>
                             <h3 class="text-left">{{ product.cost }}</h3>
                             {% if product.id in products_in_cart %}
                             <a href="{% url 'cart' %}" class="btn btn-success">Перейти в корзину</a>

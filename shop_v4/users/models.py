@@ -3,7 +3,7 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 from django.conf import settings
-from cart.models import Order
+from cart.models import Order, Cart
 
 
 class MyUserManager(BaseUserManager):
@@ -90,15 +90,6 @@ class Profile(models.Model):
             self.save()
 
     def upgrade_loyalty_card(self):
-        '''
-        spent = 0
-        for obj in Cart.objects.filter(user=self.user):
-            order = Order.objects.filter(cart=obj).first()
-            if order:
-                spent += order.amount
-        spent += Cart.objects.get(user=self.user, active='t').get_total()
-        '''
-
         spent = 0
         for order in Order.objects.filter(user=self.user):
             if order:
@@ -117,7 +108,3 @@ class Profile(models.Model):
                     if arr[0][arr[1].index(self.loyalty_card.name)] <= arr[0][arr[1].index(new_level)]:
                         self.loyalty_card = LoyaltyCard.objects.get(name=new_level)
                         self.save()
-
-
-
-

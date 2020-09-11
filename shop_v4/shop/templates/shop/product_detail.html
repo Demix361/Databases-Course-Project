@@ -12,8 +12,8 @@
         <div class="card" style="width: 20rem;">
             <div class="card-body">
                 <h1 class="card-title" >{{ object.name }}</h1>
-                <a href="{% url 'shop-category' product.category %}"><h4 class="card-subtitle mb-4 text-muted">{{ object.category }}</h4></a>
-                <p>{{ object.color }} цвет</p>
+                <a href="{% url 'shop-category' product.category.id %}"><h4 class="card-subtitle mb-4 text-muted">{{ object.category }}</h4></a>
+                <p>{{ object.color.name }} цвет</p>
                 <h5 class="card-text mb-3">{{ object.description }}</h5>
                 <h3 class="text-left mb-5">{{ object.cost }} ₽</h3>
 
