@@ -119,19 +119,34 @@
         <div class="col-md-4">
             <h4 class="my-4">Фильтры</h4>
         <form method="GET" action=".">
+
+            <h5 class="my-4">Цвет</h5>
+            <div class="form-group">
+                {% for color in colors %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="clr_{{ color.id }}" name="clr_{{ color.id }}">
+                    <label class="form-check-label" for="clr_{{ color.id }}">
+                        {{ color.name }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+
             {% for feature in category.get_features %}
             <h5 class="my-4">{{ feature.name }}</h5>
             {% if feature.type == 'checkbox' %}
-            {% for variant in feature.get_variants %}
             <div class="form-group">
+            {% for variant in feature.get_variants %}
+
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="ch_{{ variant.id }}" name="ch_{{ variant.id }}">
                     <label class="form-check-label" for="ch_{{ variant.id }}">
                         {{ variant.name }}
                     </label>
                 </div>
-            </div>
+
             {% endfor %}
+            </div>
             {% elif feature.type == 'radiobutton' %}
             <div class="form-group">
             {% for variant in feature.get_variants %}

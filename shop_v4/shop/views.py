@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
-from .models import Product, Category, Feature, FeatureVariant, FeatureSet
+from .models import Product, Category, Feature, FeatureVariant, FeatureSet, Color
 from cart.models import Cart
 from functools import reduce
 
@@ -64,37 +64,59 @@ class ProductCategoryDetailView(DetailView):
                                                                                        flat=True)
 
         context['filtered_products'] = Product.objects.filter(category=self.get_object())
-        res = FeatureSet
+        context['colors'] = Color.objects.all()
 
-        all_q = self.get_object().get_products()
-        max_len = len(all_q)
-        filters_id = [[], []]
-        for f in self.get_object().get_features():
-            if f.type == 'checkbox':
-                for v in f.get_variants():
-                    var = self.request.GET.get('ch_' + str(v.id))
+        #all_q = self.get_object().get_products()
+        filtered_q = FeatureSet.objects.filter(product__category=self.get_object())
+        used = []
 
-                    if is_valid_queryparam(var):
-                        filters_id[0].append(v.id)
+        # Заполненение filtered_q отфильтрованными элементами по Feature
+        for f in self.get_object().get_features().filter(type='checkbox'):
+            cur_filtered = FeatureSet.objects.filter(product=9999999999)
+            used.append([])
+            for v in f.get_variants():
+                var = self.request.GET.get('ch_' + str(v.id))
+
+                if is_valid_queryparam(var):
+                    used[-1].append(1)
+                    for line in FeatureSet.objects.filter(feature_variant=v.id):
+                        cur_filtered = cur_filtered | FeatureSet.objects.filter(product=line.product)
+                else:
+                    used[-1].append(0)
+
+            print(used[-1])
+            if 1 in used[-1]:
+                filtered_q = filtered_q & cur_filtered
 
 
-            elif f.type == 'radiobutton':
-                var = self.request.GET.get('rb_' + str(f.id))
 
-                if is_valid_queryparam(var) and var != 'no':
-                    try:
-                        var = int(var)
-                        filters_id[1].append(var)
-                        res = res.objects.filter(feature_variant=var)
-                    except ValueError:
-                        pass
+        # Заполненение filtered_q отфильтрованными элементами по Color
+        cur_filtered = FeatureSet.objects.filter(product=9999999999)
+        used = []
+        for clr in Color.objects.all():
+            var = self.request.GET.get('clr_' + str(clr.id))
 
-        print(filters_id)
+            if is_valid_queryparam(var):
+                used.append(1)
+                for line in FeatureSet.objects.filter(product__color=clr.id):
+                    cur_filtered = cur_filtered | FeatureSet.objects.filter(product=line.product)
+            else:
+                used.append(0)
 
-        for filter in filters_id[0]:
-            
+        if 1 in used:
+            filtered_q = filtered_q & cur_filtered
 
-        #filter_products(filters_id, self.get_object().id)
+        # FeatureSet -> Product
+        ok_products = []
+        for p in filtered_q.values('product'):
+            ok_products.append(p['product'])
+        ok_products = set(ok_products)
+
+        final_products = Product.objects.filter(name='0000000000000000')
+        for i in ok_products:
+            final_products = final_products | Product.objects.filter(id=i)
+
+        context['filtered_products'] = final_products
 
         return context
 
