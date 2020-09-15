@@ -94,3 +94,27 @@ a.article-title:hover {
 p.price {
   font-size: 20px;
 }
+
+.c-pdp-price__discount {
+    font-size: 1.1rem;
+    line-height: 1.8rem;
+    background: #fff200;
+    font-weight: 700;
+    padding: 0;
+    border-radius: 4px;
+    text-align: center;
+    width: 5.4rem;
+}
+
+.u-mr-4 {
+    margin-right: .4rem;
+}
+
+.c-pdp-price__old {
+    font-size: 1.1rem;
+    line-height: 2.2rem;
+    color: #999;
+    text-decoration: line-through;
+    min-height: 2.2rem;
+}
+

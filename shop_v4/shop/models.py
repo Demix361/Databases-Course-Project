@@ -15,6 +15,15 @@ class Category(models.Model):
     def get_products(self):
         return Product.objects.filter(category=self)
 
+    def get_displayed_products(self):
+        return Product.objects.filter(category=self, displayed=True)
+
+    def get_stock_products(self):
+        return Product.objects.filter(category=self, in_stock=True)
+
+    def get_displayed_stock_products(self):
+        return Product.objects.filter(category=self, displayed=True, in_stock=True)
+
 
 class Color(models.Model):
     name = models.CharField(max_length=50)
@@ -27,15 +36,22 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
-    cost = models.FloatField()
+    cost = models.IntegerField()
     description = models.TextField()
     image = models.ImageField(default='product_default.jpg', upload_to='product_pics')
+    displayed = models.BooleanField(default=True)
+    in_stock = models.BooleanField(default=True)
+    on_sale = models.BooleanField(default=False)
+    discount = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
 
     def get_reviews(self):
         return Review.objects.filter(product=self)
+
+    def get_sale_cost(self):
+        return round((100 - self.discount) / 100 * self.cost)
 
 
 class Feature(models.Model):

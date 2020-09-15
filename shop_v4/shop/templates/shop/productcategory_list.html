@@ -108,12 +108,24 @@
                                 <div class="card-body">
                                     <h4><a class="card-title" href="{% url 'shop-product' product.id %}">{{ product.name }}</a></h4>
                                     <p class="card-text">{{ product.category.name }}</p>
-                                    <h3 class="text-left">{{ product.cost }}</h3>
+                                    {% if not product.in_stock %}
+                                    <h4 class="text-left">Нет в наличии</h4>
+                                    {% elif product.on_sale %}
+                                    <span class="u-mr-4 c-pdp-price__old" data-sel="new_comparison-span-old_price-10023519-2">{{ product.cost }}</span>
+
+                                    <span class="c-pdp-price__discount">-{{ product.discount }}%</span>
+                                    <h3 class="text-left">{{ product.get_sale_cost }} ₽</h3>
+                                    {% else %}
+                                    <h3 class="text-left">{{ product.cost }} ₽</h3>
+                                    {% endif %}
+
+                                    {% if product.in_stock %}
                                     {% if product.id in products_in_cart %}
                                     <a href="{% url 'cart' %}" class="btn btn-success">Перейти в корзину</a>
                                     {% else %}
                                     <a href="{% url 'add-to-cart' product.id %}" class="btn btn-primary">Добавить
                                         в корзину</a>
+                                    {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
@@ -130,6 +142,27 @@
         <div class="col-md-4">
             <h4 class="my-4">Фильтры</h4>
         <form method="GET" action=".">
+            <h5 class="my-4">В наличии</h5>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="rb_st_yes" name="rb_st" value="yes">
+                    <label class="form-check-label" for="rb_st_yes">
+                        Да
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="rb_st_no" name="rb_st" value="no">
+                    <label class="form-check-label" for="rb_st_no">
+                        Нет
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="rb_st_all" name="rb_st" value="all" checked>
+                    <label class="form-check-label" for="rb_st_all">
+                        Любые
+                    </label>
+                </div>
+            </div>
 
             <h5 class="my-4">Цвет</h5>
             <div class="form-group">

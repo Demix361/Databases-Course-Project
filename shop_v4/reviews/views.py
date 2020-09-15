@@ -23,6 +23,8 @@ class ReviewCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def test_func(self):
         if self.request.user.id in Product.objects.get(id=self.kwargs['pk']).get_reviews().values_list('user', flat=True):
             return False
+        if not Product.objects.get(id=self.kwargs['pk']).displayed:
+            return False
         return True
 
 

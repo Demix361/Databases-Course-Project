@@ -45,7 +45,6 @@ class Cart(models.Model):
         self.get_cart_items().delete()
 
 
-
 # OK
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
@@ -56,13 +55,22 @@ class CartItem(models.Model):
         return f'{self.product.name} in cart of {self.cart.user.email}'
 
     def get_final_cost(self):
-        return round(self.product.cost * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
+        if self.product.on_sale:
+            return round(((100 - self.product.discount) / 100 * self.product.cost) * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
+        else:
+            return round(self.product.cost * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
 
     def get_full_cost(self):
-        return round(self.product.cost * self.quantity, 2)
+        if self.product.on_sale:
+            return round(((100 - self.product.discount) / 100 * self.product.cost) * self.quantity, 2)
+        else:
+            return round(self.product.cost * self.quantity, 2)
 
     def get_full_final_cost(self):
-        return round(self.product.cost * self.quantity * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
+        if self.product.on_sale:
+            return round(((100 - self.product.discount) / 100 * self.product.cost) * self.quantity * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
+        else:
+            return round(self.product.cost * self.quantity * (100 - self.cart.user.profile.loyalty_card.discount) / 100, 2)
 
 
 # OK
@@ -131,4 +139,3 @@ class OrderItem(models.Model):
 
     def get_full_final_cost(self):
         return round(self.item_cost_final * self.quantity, 2)
-
