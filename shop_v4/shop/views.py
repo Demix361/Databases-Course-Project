@@ -57,6 +57,7 @@ class ProductCategoryDetailView(DetailView):
         marked_colors = []
         marked_stock = 'all'
         marked_sale = 'all'
+        marked_sort = '1'
 
         # radiobutton Наличие
         var = self.request.GET.get('rb_st')
@@ -162,10 +163,23 @@ class ProductCategoryDetailView(DetailView):
             else:
                 context['filtered_products'] = self.get_object().get_products()
 
+        var = self.request.GET.get('sort')
+        if is_valid_queryparam(var):
+            if var == '1':
+                marked_sort = '1'
+                context['filtered_products'] = context['filtered_products'].order_by('name')
+            elif var == '2':
+                marked_sort = '2'
+                context['filtered_products'] = context['filtered_products'].order_by('-in_stock', 'cost')
+            elif var == '3':
+                marked_sort = '3'
+                context['filtered_products'] = context['filtered_products'].order_by('-in_stock', '-cost')
+
         context['marked_filters'] = marked_filters
         context['marked_colors'] = marked_colors
         context['marked_stock'] = marked_stock
         context['marked_sale'] = marked_sale
+        context['marked_sort'] = marked_sort
 
         return context
 

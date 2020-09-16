@@ -139,9 +139,29 @@
             </div>
 
         </div>
+
+
+
         <div class="col-md-4">
-            <h4 class="my-4">Фильтры</h4>
         <form method="GET" action=".">
+            <h4 class="my-4">Сортировать по</h4>
+            <select id="sort" class="form-control" name="sort">
+                {% if marked_sort == '2' %}
+                <option value="1">Названию</option>
+                <option value="2" selected>Цене возрастающей</option>
+                <option value="3">Цене убывающей</option>
+                {% elif marked_sort == '3' %}
+                <option value="1">Названию</option>
+                <option value="2">Цене возрастающей</option>
+                <option value="3" selected>Цене убывающей</option>
+                {% else %}
+                <option value="1" selected>Названию</option>
+                <option value="2">Цене возрастающей</option>
+                <option value="3">Цене убывающей</option>
+                {% endif %}
+            </select>
+
+            <h4 class="my-4">Фильтры</h4>
             <h5 class="my-4">В наличии</h5>
             <div class="form-group">
                 <div class="form-check">
