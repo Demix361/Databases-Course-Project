@@ -51,14 +51,20 @@ class ProductCategoryDetailView(DetailView):
         # Список цветов
         context['colors'] = Color.objects.all()
 
+        # ФИЛЬТРЫ
         filtered_q = FeatureSet.objects.filter(product__category=self.get_object(), product__displayed=True)
+        marked_filters = []
+        marked_colors = []
+        marked_stock = 'all'
 
         # radiobutton Наличие
         var = self.request.GET.get('rb_st')
         if is_valid_queryparam(var):
             if var == 'yes':
+                marked_stock = 'yes'
                 filtered_q = FeatureSet.objects.filter(product__category=self.get_object(), product__displayed=True, product__in_stock=True)
             elif var == 'no':
+                marked_stock = 'no'
                 filtered_q = FeatureSet.objects.filter(product__category=self.get_object(), product__displayed=True, product__in_stock=False)
 
         # Если категория имеет features
@@ -73,6 +79,7 @@ class ProductCategoryDetailView(DetailView):
                     var = self.request.GET.get('ch_' + str(v.id))
 
                     if is_valid_queryparam(var):
+                        marked_filters.append(v.id)
                         used[-1].append(1)
                         for line in FeatureSet.objects.filter(feature_variant=v.id):
                             cur_filtered = cur_filtered | FeatureSet.objects.filter(product=line.product)
@@ -88,6 +95,7 @@ class ProductCategoryDetailView(DetailView):
 
                 if is_valid_queryparam(var) and var != 'no':
                     cur_filtered = FeatureSet.objects.none()
+                    marked_filters.append(int(var))
 
                     for line in FeatureSet.objects.filter(feature_variant=int(var)):
                         cur_filtered = cur_filtered | FeatureSet.objects.filter(product=line.product)
@@ -102,6 +110,7 @@ class ProductCategoryDetailView(DetailView):
 
                 if is_valid_queryparam(var):
                     used.append(1)
+                    marked_colors.append(clr.id)
                     for line in FeatureSet.objects.filter(product__color=clr.id):
                         cur_filtered = cur_filtered | FeatureSet.objects.filter(product=line.product)
                 else:
@@ -133,6 +142,7 @@ class ProductCategoryDetailView(DetailView):
 
                 if is_valid_queryparam(var):
                     used.append(1)
+                    marked_colors.append(clr.id)
                     cur_products = cur_products | Product.objects.filter(color=clr.id)
                 else:
                     used.append(0)
@@ -141,6 +151,10 @@ class ProductCategoryDetailView(DetailView):
                 context['filtered_products'] = cur_products
             else:
                 context['filtered_products'] = self.get_object().get_products()
+
+        context['marked_filters'] = marked_filters
+        context['marked_colors'] = marked_colors
+        context['marked_stock'] = marked_stock
 
         return context
 
