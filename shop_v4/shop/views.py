@@ -56,16 +56,26 @@ class ProductCategoryDetailView(DetailView):
         marked_filters = []
         marked_colors = []
         marked_stock = 'all'
+        marked_sale = 'all'
 
         # radiobutton Наличие
         var = self.request.GET.get('rb_st')
         if is_valid_queryparam(var):
             if var == 'yes':
                 marked_stock = 'yes'
-                filtered_q = FeatureSet.objects.filter(product__category=self.get_object(), product__displayed=True, product__in_stock=True)
+                filtered_q = filtered_q & FeatureSet.objects.filter(product__in_stock=True)
             elif var == 'no':
                 marked_stock = 'no'
-                filtered_q = FeatureSet.objects.filter(product__category=self.get_object(), product__displayed=True, product__in_stock=False)
+                filtered_q = filtered_q & FeatureSet.objects.filter(product__in_stock=False)
+
+        var = self.request.GET.get('rb_sl')
+        if is_valid_queryparam(var):
+            if var == 'yes':
+                marked_sale = 'yes'
+                filtered_q = filtered_q & FeatureSet.objects.filter(product__on_sale=True)
+            elif var == 'no':
+                marked_sale = 'no'
+                filtered_q = filtered_q & FeatureSet.objects.filter(product__on_sale=False)
 
         # Если категория имеет features
         if len(filtered_q) != 0:
@@ -155,6 +165,7 @@ class ProductCategoryDetailView(DetailView):
         context['marked_filters'] = marked_filters
         context['marked_colors'] = marked_colors
         context['marked_stock'] = marked_stock
+        context['marked_sale'] = marked_sale
 
         return context
 
