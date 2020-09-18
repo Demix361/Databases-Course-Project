@@ -182,6 +182,136 @@ def chair_generator(first_prod_id, first_set_id, n):
 	return first_prod_id + n, first_set_id
 
 
+def table_generator(first_prod_id, first_set_id, n):
+	shuffle(names)
+	images = [f for f in os.listdir(os.path.join('images', 'tables'))]
+	img_len = len(images)
+
+	var_d = {
+		1: 11,
+		2: 12,
+		3: 13,
+		4: 14,
+		5: 15
+	}
+
+	for id in range(first_prod_id, first_prod_id + n, 1):
+		image_f = images[id % img_len]
+		color = image_f[0:image_f.find('-')]
+		var = image_f[len(color) + 1:image_f[len(color) + 1:].find('-') + len(color) + 1]
+
+		if randint(0, 100) > 94:
+			in_stock = 0
+		else:
+			in_stock = 1
+		if in_stock:
+			if randint(0, 100) > 70:
+				on_sale = 1
+				discount = int(randint(1, 3) * 10)
+			else:
+				on_sale = 0
+				discount = 0
+		else:
+			on_sale = 0
+			discount = 0
+
+		image_name = str(randint(0, 1000000)) + '_' + image_f
+		img = cv2.imread(os.path.join('images', 'tables', image_f))
+		base = os.path.split(os.getcwd())[0]
+		cv2.imwrite(os.path.join(base, 'shop_v4', 'media', 'product_pics', image_name), img)
+
+		product = Product(
+			id=id,
+			name=names[id % len(names)],
+			category=3,
+			color=color_d[int(color)],
+			cost=int(randint(80, 220) * 100 - 1),
+			description="",
+			image='product_pics/' + image_name,
+			displayed=1,
+			in_stock=in_stock,
+			on_sale=on_sale,
+			discount=discount
+		)
+		products.append(product)
+
+		feature_set = FeatureSet(
+			id=first_set_id,
+			product=id,
+			feature_variant=var_d[int(var)]
+		)
+		first_set_id += 1
+		feature_sets.append(feature_set)
+
+	return first_prod_id + n, first_set_id
+
+
+# зеркальные(да, нет)
+# назначение(Гардероб, Купе, Детский)
+# угловой(да, нет)
+# [цвет]-[0,1]-[1(гард), 2(купе), 3(детск)]-[0,1]
+def closet_generator(first_prod_id, first_set_id, n):
+	shuffle(names)
+	images = [f for f in os.listdir(os.path.join('images', 'closets'))]
+	img_len = len(images)
+
+	var_d = {
+		1: 22,
+		2: 23,
+		3: 24
+	}
+
+	for id in range(first_prod_id, first_prod_id + n, 1):
+		image_f = images[id % img_len]
+		color = image_f[0:image_f.find('-')]
+		var = image_f[len(color) + 1:image_f[len(color) + 1:].find('-') + len(color) + 1]
+
+		if randint(0, 100) > 94:
+			in_stock = 0
+		else:
+			in_stock = 1
+		if in_stock:
+			if randint(0, 100) > 70:
+				on_sale = 1
+				discount = int(randint(1, 3) * 10)
+			else:
+				on_sale = 0
+				discount = 0
+		else:
+			on_sale = 0
+			discount = 0
+
+		image_name = str(randint(0, 1000000)) + '_' + image_f
+		img = cv2.imread(os.path.join('images', 'tables', image_f))
+		base = os.path.split(os.getcwd())[0]
+		cv2.imwrite(os.path.join(base, 'shop_v4', 'media', 'product_pics', image_name), img)
+
+		product = Product(
+			id=id,
+			name=names[id % len(names)],
+			category=3,
+			color=color_d[int(color)],
+			cost=int(randint(80, 220) * 100 - 1),
+			description="",
+			image='product_pics/' + image_name,
+			displayed=1,
+			in_stock=in_stock,
+			on_sale=on_sale,
+			discount=discount
+		)
+		products.append(product)
+
+		feature_set = FeatureSet(
+			id=first_set_id,
+			product=id,
+			feature_variant=var_d[int(var)]
+		)
+		first_set_id += 1
+		feature_sets.append(feature_set)
+
+	return first_prod_id + n, first_set_id
+
+
 def csv_output_product(fname):
 	with open(fname, 'w', encoding='utf8') as f:
 		for p in products:
