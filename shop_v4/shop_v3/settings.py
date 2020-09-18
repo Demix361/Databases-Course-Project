@@ -93,7 +93,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'shop_v4',
+        'NAME': 'shop_v4_test',
     }
 }
 

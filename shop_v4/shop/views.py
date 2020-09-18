@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from .models import Product, Category, Feature, FeatureVariant, FeatureSet, Color
-from cart.models import Cart
+from cart.models import Cart, Order, OrderItem
 from functools import reduce
 
 
@@ -13,13 +13,7 @@ class ProductListView(ListView):
     paginate_by = 18
 
     def get_queryset(self):
-        order = self.request.GET.get('order')
-        if order == 'cost_up':
-            return Product.objects.order_by('-cost')
-        elif order == 'cost_down':
-            return Product.objects.order_by('cost')
-        else:
-            return Product.objects.order_by('name')
+        return Product.objects.filter(displayed=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
