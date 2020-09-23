@@ -4,9 +4,16 @@ from django.urls import reverse
 
 
 class Review(models.Model):
+	class Rating(models.IntegerChoices):
+		ONE = 1
+		TWO = 2
+		THREE = 3
+		FOUR = 4
+		FIVE = 5
+
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	product = models.ForeignKey('shop.Product', on_delete=models.CASCADE)
-	rating = models.IntegerField()
+	rating = models.IntegerField(choices=Rating.choices)
 	advantages = models.TextField()
 	disadvantages = models.TextField()
 	review = models.TextField()

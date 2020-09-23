@@ -13,7 +13,7 @@ class ProductListView(ListView):
     paginate_by = 18
 
     def get_queryset(self):
-        return Product.objects.filter(displayed=True)
+        return Product.objects.filter(displayed=True).order_by('name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

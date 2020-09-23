@@ -132,9 +132,9 @@
 
 
         <div class="col-md-4">
-
+            <h2>Категории:</h2>
             {% for c in category_list %}
-                <a href="{% url 'shop-category' c.id %}"><h3>{{ c.name }}</h3></a>
+                <a href="{% url 'shop-category' c.id %}"><h4>{{ c.name }}</h4></a>
             {% endfor %}
 
         </div>
