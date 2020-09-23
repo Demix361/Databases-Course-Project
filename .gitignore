@@ -3,6 +3,7 @@ __pycache__
 
 generators/.idea
 generators/__pycache__
+generators/*.csv
 
 shop_v4/.idea
 shop_v4/__pycache__
@@ -26,4 +27,25 @@ shop_v4/review/migrations/__pycache__
 shop_v4/shop_v3/.idea
 shop_v4/shop_v3/__pycache__
 
-generators/*.csv
+
+furniture_store/.idea
+furniture_store/__pycache__
+
+furniture_store/cart/.idea
+furniture_store/cart/__pycache__
+furniture_store/cart/migrations/__pycache__
+
+furniture_store/users/.idea
+furniture_store/users/__pycache__
+furniture_store/users/migrations/__pycache__
+
+furniture_store/shop/.idea
+furniture_store/shop/__pycache__
+furniture_store/shop/migrations/__pycache__
+
+furniture_store/review/.idea
+furniture_store/review/__pycache__
+furniture_store/review/migrations/__pycache__
+
+furniture_store/furniture_store/.idea
+furniture_store/furniture_store/__pycache__
