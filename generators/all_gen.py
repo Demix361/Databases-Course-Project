@@ -1,6 +1,9 @@
 from random import choice, randint, shuffle
 import os
 import cv2
+import sqlite3
+
+from datetime_gen import get_datetime
 
 
 class Product:
@@ -25,6 +28,28 @@ class FeatureSet:
 		self.feature_variant = feature_variant
 
 
+class User:
+	def __init__(self, id, password, last_login, email, is_active, is_admin):
+		self.id =id
+		self.password = password
+		self.last_login = last_login
+		self.email = email
+		self.is_active = is_active
+		self.is_admin = is_admin
+
+
+class Profile:
+	def __init__(self, id, name, user_id, loyalty_card_id):
+		self.id = id
+		self.name = name
+		self.user_id = user_id
+		self.loyalty_card_id = loyalty_card_id
+
+
+class Cart:
+	def __init__(self, id, user):
+		self.id = id
+		self.user = user
 
 
 def get_name_pool(filename):
@@ -55,7 +80,9 @@ color_d = {
 }
 products = []
 feature_sets = []
-
+users = []
+profiles = []
+carts = []
 
 
 def bed_generator(first_prod_id, first_set_id, n):
@@ -93,7 +120,7 @@ def bed_generator(first_prod_id, first_set_id, n):
 		image_name = str(randint(0, 1000000)) + '_' + image_f
 		img = cv2.imread(os.path.join('images', 'beds', image_f))
 		base = os.path.split(os.getcwd())[0]
-		cv2.imwrite(os.path.join(base, 'shop_v4', 'media', 'product_pics', image_name), img)
+		cv2.imwrite(os.path.join(base, 'furniture_store', 'media', 'product_pics', image_name), img)
 
 		product = Product(
 			id=id,
@@ -156,7 +183,7 @@ def chair_generator(first_prod_id, first_set_id, n):
 		image_name = str(randint(0, 1000000)) + '_' + image_f
 		img = cv2.imread(os.path.join('images', 'chairs', image_f))
 		base = os.path.split(os.getcwd())[0]
-		cv2.imwrite(os.path.join(base, 'shop_v4', 'media', 'product_pics', image_name), img)
+		cv2.imwrite(os.path.join(base, 'furniture_store', 'media', 'product_pics', image_name), img)
 
 		product = Product(
 			id=id,
@@ -218,7 +245,7 @@ def table_generator(first_prod_id, first_set_id, n):
 		image_name = str(randint(0, 1000000)) + '_' + image_f
 		img = cv2.imread(os.path.join('images', 'tables', image_f))
 		base = os.path.split(os.getcwd())[0]
-		cv2.imwrite(os.path.join(base, 'shop_v4', 'media', 'product_pics', image_name), img)
+		cv2.imwrite(os.path.join(base, 'furniture_store', 'media', 'product_pics', image_name), img)
 
 		product = Product(
 			id=id,
@@ -293,7 +320,7 @@ def closet_generator(first_prod_id, first_set_id, n):
 		image_name = str(randint(0, 1000000)) + '_' + image_f
 		img = cv2.imread(os.path.join('images', 'closets', image_f))
 		base = os.path.split(os.getcwd())[0]
-		cv2.imwrite(os.path.join(base, 'shop_v4', 'media', 'product_pics', image_name), img)
+		cv2.imwrite(os.path.join(base, 'furniture_store', 'media', 'product_pics', image_name), img)
 
 		product = Product(
 			id=id,
@@ -361,7 +388,7 @@ def chests_generator(first_prod_id, first_set_id, n):
 		image_name = str(randint(0, 1000000)) + '_' + image_f
 		img = cv2.imread(os.path.join('images', 'chests', image_f))
 		base = os.path.split(os.getcwd())[0]
-		cv2.imwrite(os.path.join(base, 'shop_v4', 'media', 'product_pics', image_name), img)
+		cv2.imwrite(os.path.join(base, 'furniture_store', 'media', 'product_pics', image_name), img)
 
 		product = Product(
 			id=id,
@@ -381,34 +408,157 @@ def chests_generator(first_prod_id, first_set_id, n):
 	return first_prod_id + n, first_set_id
 
 
+def fill_db_product(db_name):
+	conn = sqlite3.connect(os.path.join(os.path.split(os.getcwd())[0], 'furniture_store', db_name))
+	c = conn.cursor()
+	records = [(p.id, p.name, p.category, p.color, p.description, p.image, p.discount, p.displayed, p.in_stock, p.on_sale, p.cost) for p in products]
+	c.executemany('INSERT INTO shop_product VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', records)
+	conn.commit()
+	conn.close()
 
 
+def fill_db_featureset(db_name):
+	conn = sqlite3.connect(os.path.join(os.path.split(os.getcwd())[0], 'furniture_store', db_name))
+	c = conn.cursor()
+	records = [(f.id, f.feature_variant, f.product) for f in feature_sets]
+	c.executemany('INSERT INTO shop_featureset VALUES (?, ?, ?)', records)
+	conn.commit()
+	conn.close()
 
-def csv_output_product(fname):
-	with open(fname, 'w', encoding='utf8') as f:
-		for p in products:
-			line = f'{p.id};{p.name};{p.category};{p.color};{p.description};{p.image};{p.discount};{p.displayed};{p.in_stock};{p.on_sale};{p.cost}\n'
-			f.write(line)
+
+def delete_table(db_name, table):
+	conn = sqlite3.connect(os.path.join(os.path.split(os.getcwd())[0], 'furniture_store', db_name))
+	c = conn.cursor()
+	c.execute(f"DELETE FROM {table}")
+	conn.commit()
+	conn.close()
 
 
-def csv_output_feature_set(fname):
-	with open(fname, 'w', encoding='utf8') as f:
-		for fs in feature_sets:
-			line = f'{fs.id};{fs.feature_variant};{fs.product}\n'
-			f.write(line)
+# password = 123456qwe
+# user0 - admin
+def user_generator(db_name, n):
+	conn = sqlite3.connect(os.path.join(os.path.split(os.getcwd())[0], 'furniture_store', db_name))
+	c = conn.cursor()
+
+	password = 'pbkdf2_sha256$216000$c6PyAKwEtHZz$+U9C6mqIZ59QFwqWXaTPCX+0iL6XPURunSmZhJip9rQ='
+	for i in range(n):
+		if i == 0:
+			admin = 1
+		else:
+			admin = 0
+		c.execute('INSERT INTO users_myuser VALUES (?, ?, ?, ?, ?, ?)', (i, password, None, f'user{ i }@mail.ru', 1, admin))
+		c.execute('INSERT INTO users_profile VALUES (?, ?, ?, ?)', (i, None, i, 6))
+		c.execute('INSERT INTO cart_cart VALUES (?, ?)', (i, i))
+
+	conn.commit()
+	conn.close()
+
+
+def review_generator(db_name):
+	conn = sqlite3.connect(os.path.join(os.path.split(os.getcwd())[0], 'furniture_store', db_name))
+	c = conn.cursor()
+	u_ids = [row[0] for row in c.execute('SELECT * FROM users_myuser')]
+	p_ids = [row[0] for row in c.execute('SELECT * FROM shop_product')]
+	id = 0
+
+	for p in range(len(p_ids)):
+		n = randint(0, 15)
+		shuffle(u_ids)
+
+		for i in range(n):
+			rating = randint(1, 5)
+			if rating > 3:
+				review_text = [
+					'Отличный товар!',
+					'Лучшее за свои деньги',
+					'Покупка очень понравилась, всем рекомендую!',
+					'Замечательный товар, рад покупке',
+					'Цена немного завышена, но товаром все равно доволен',
+					'все классс!',
+					'рекомендую всем для покупки этот товар, нисколько не жалею потраченных денег.',
+				]
+				plus = [
+					'Отличное качество',
+					'Простота сборки',
+					'Очень удобно пользоваться',
+					'Цвет отлично вписывается в обстановку',
+					'+',
+				]
+				minus = [
+					'Не обнаружил',
+					'Довольно высокая цена',
+					'нет',
+					'Спустя месяц пользования могу сказать, что минусов не нашел.',
+					'Цена',
+				]
+			else:
+				review_text = [
+					'Товар разочаровал',
+					'Товар не стоит своих денег',
+					'Ужасное качество материалов',
+					'НЕ покупайте это!!',
+					'Ужас, как вообще такое можно продавать',
+					'Товар сильно разочаровал, не советую к покупке',
+				]
+				plus = [
+					'Плюсов нет, одни минусы',
+					'Из плюсов можно отметить только быструю доставку',
+					'не нашел',
+					'-',
+					'нет',
+				]
+				minus = [
+					'Отвратительный цвет',
+					'Получил товар с дефектами',
+					'Слишком высокая цена',
+					'🤢🤢🤢🤢🤢',
+					'не понравилось',
+				]
+
+			date = get_datetime('2015-01-01', '2020-12-31') + '.272315'
+			c.execute('INSERT INTO reviews_review VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (id, choice(plus), choice(minus), choice(review_text), date, p_ids[p], u_ids[i], rating))
+			id += 1
+
+	conn.commit()
+	conn.close()
 
 
 def generate_all():
-	cur_p_id = 0
-	cur_set_id = 0
+	cur_p_id = 1
+	cur_set_id = 1
+	db = 'db.sqlite3'
 
+	# Удаляем старые картинки из директории сайта
+	base = os.path.join(os.path.split(os.getcwd())[0], 'furniture_store', 'media', 'product_pics')
+	files = [f for f in os.listdir(base)]
+	for f in files:
+		os.remove(os.path.join(base, f))
+
+	# Удаляем прошлые данные из таблиц
+	delete_table(db, 'reviews_review')
+	delete_table(db, 'cart_cartitem')
+	delete_table(db, 'cart_orderitem')
+	delete_table(db, 'cart_order')
+	delete_table(db, 'shop_featureset')
+	delete_table(db, 'shop_product')
+
+	delete_table(db, 'cart_cart')
+	delete_table(db, 'users_profile')
+	delete_table(db, 'users_myuser')
+
+	# Генерация таблиц product и featureset
 	cur_p_id, cur_set_id = bed_generator(cur_p_id, cur_set_id, 200)
 	cur_p_id, cur_set_id = chair_generator(cur_p_id, cur_set_id, 200)
 	cur_p_id, cur_set_id = table_generator(cur_p_id, cur_set_id, 200)
 	cur_p_id, cur_set_id = closet_generator(cur_p_id, cur_set_id, 200)
 	cur_p_id, cur_set_id = chests_generator(cur_p_id, cur_set_id, 200)
+	fill_db_product(db)
+	fill_db_featureset(db)
 
-	csv_output_product('product.csv')
-	csv_output_feature_set('feature_set.csv')
+	# Генерация таблиц user, profile, cart
+	user_generator(db, 500)
+
+	review_generator(db)
 
 generate_all()
+
